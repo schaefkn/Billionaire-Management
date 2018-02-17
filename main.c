@@ -27,7 +27,7 @@ void printGreeting(void);
 void printMenu(void);
 void printAddBillionaireMenu(void);
 
-void printWhitespace(int number);
+void printWhitespace(int times);
 void printWhitespaceOnce(void);
 
 void printAllBillionaires(void);
@@ -230,8 +230,8 @@ void printWhitespaceOnce(void) {
 }
 
 
-void printWhitespace(int number) {
-    for (int i = 0; i < number; ++i) {
+void printWhitespace(int times) {
+    for (int i = 0; i < times; ++i) {
         printf("\n");
     }
 }
