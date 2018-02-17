@@ -19,13 +19,16 @@ struct billionaire_t {
 
 struct billionaire_t* balloc();
 struct billionaire_t* fillBillonaire(char name[], char surname[], float net_worth, int selfmade_score);
+struct billionaire_t* getBillionaireByIndex(int index);
 
 void addBillionaireToLinkedList(struct billionaire_t *billionaire);
 void createBillionaire(char name[], char surname[], float net_worth, int selfmade_score);
+void deleteBillionaireFromList(int index);
 
 void printGreeting(void);
 void printMenu(void);
 void printAddBillionaireMenu(void);
+void printDeleteBillionaireMenu(void);
 
 void printWhitespace(int times);
 void printWhitespaceOnce(void);
@@ -37,14 +40,24 @@ void handleInput(void);
 void handleExit(void);
 
 
-int getInput();
+int getInput(int min, int max);
 
 struct billionaire_t *head;
 struct billionaire_t *tail;
 struct billionaire_t *current;
 
+
+void insertSampleData(void) {
+    createBillionaire("Jeff", "Bezos", 120.8, 8);
+    createBillionaire("Bill", "Gates", 91.7, 8);
+    createBillionaire("Warren", "Buffet", 87.5, 8);
+}
+
 int main(void) {
     printGreeting();
+    insertSampleData();
+    deleteBillionaireFromList(1);
+    deleteBillionaireFromList(1);
     while(true) {
         printMenu();
         handleInput();
@@ -67,6 +80,24 @@ struct billionaire_t* fillBillonaire(char name[], char surname[], float net_wort
     return tmp;
 }
 
+struct billionaire_t* getBillionaireByIndex(int index) {
+    if(index == 0) {
+        return head;
+    } else {
+        int i = 0;
+        struct billionaire_t* billionaireToReturn = head;
+        while(i < index) {
+            if(billionaireToReturn->next != NULL) {
+                i++;
+                billionaireToReturn = billionaireToReturn->next;
+            } else {
+                return NULL;
+            }
+        }
+        return billionaireToReturn;
+    }
+}
+
 void addBillionaireToLinkedList(struct billionaire_t *billionaire) {
     struct billionaire_t* current = head;
 
@@ -87,19 +118,50 @@ void createBillionaire(char name[], char surname[], float net_worth, int selfmad
     addBillionaireToLinkedList(tmp);
 }
 
-int getInput(void) {
+void deleteBillionaireFromList(int index) {
+    struct billionaire_t* toDelete = getBillionaireByIndex(index);
+    char name[128+1];
+    char surname[128+1];
+
+    if(toDelete == NULL) {
+        printf("Error, there is no Billionaire with index %d\n", index);
+        return;
+    } else {
+        strcpy(name, toDelete->name);
+        strcpy(surname, toDelete->surname);
+
+        if (toDelete == head) {
+            if(toDelete->next != NULL) {
+                toDelete->next->prev = NULL;
+                head = toDelete->next;
+            } else {
+                head = NULL;
+            }
+        } else if (toDelete == tail) {
+            toDelete->prev->next = NULL;
+            tail = toDelete->prev;
+        } else {
+            toDelete->prev->next = toDelete->next;
+            toDelete->next->prev = toDelete->prev;
+        }
+        free(toDelete);
+        printf("Deleted Billionaire %s %s\n", name, surname);
+    }
+}
+
+int getInput(int min, int max) {
     int input = -1;
 
     do {
         printf("Selection: ");
         scanf("%d", &input);
-    } while(input < 0 || input > 9);
+    } while(input < min || input > max);
 
     return input;
 }
 
 void handleInput(void) {
-    int selection = getInput();
+    int selection = getInput(0, 9);
 
     switch (selection) {
         case 1:
@@ -109,6 +171,7 @@ void handleInput(void) {
             printAllBillionaires();
             break;
         case 3:
+            printDeleteBillionaireMenu();
             break;
         case 4:
             break;
@@ -216,6 +279,29 @@ void printAllBillionaires(void) {
 
 }
 
+void printDeleteBillionaireMenu(void) {
+    printf("==================================================\n");
+    printf("                DELETE BILLIONAIRE                \n");
+    printf("==================================================\n");
+
+    if(head == NULL) {
+        printf("There are no Billionares in your list!\n");
+    } else {
+        int number = 1;
+        current = head;
+        printBillionareProperties(current, number);
+        while(current->next != NULL) {
+            number++;
+            current = current->next;
+            printBillionareProperties(current, number);
+        }
+        printWhitespaceOnce();
+
+        int input = getInput(0, number);
+        deleteBillionaireFromList(input);
+    }
+}
+
 void printBillionareProperties(struct billionaire_t* billionaire, int number) {
     printf("================= Billionaire %d =================\n", number);
     printf("First Name: %s\n", billionaire->name);
@@ -228,7 +314,6 @@ void printBillionareProperties(struct billionaire_t* billionaire, int number) {
 void printWhitespaceOnce(void) {
     printWhitespace(1);
 }
-
 
 void printWhitespace(int times) {
     for (int i = 0; i < times; ++i) {
