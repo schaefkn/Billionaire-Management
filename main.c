@@ -20,7 +20,6 @@ struct billionaire_t {
 struct billionaire_t* balloc();
 struct billionaire_t* fillBillonaire(char name[], char surname[], float net_worth, int selfmade_score);
 
-void addBillionaire(void);
 void addBillionaireToLinkedList(struct billionaire_t *billionaire);
 void createBillionaire(char name[], char surname[], float net_worth, int selfmade_score);
 
@@ -56,10 +55,6 @@ struct billionaire_t* fillBillonaire(char name[], char surname[], float net_wort
     tmp->prev = NULL;
 
     return tmp;
-}
-
-void addBillionaire() {
-
 }
 
 void addBillionaireToLinkedList(struct billionaire_t *billionaire) {
