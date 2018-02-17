@@ -26,7 +26,7 @@ void createBillionaire(char name[], char surname[], float net_worth, int selfmad
 void printMenu(void);
 void printAddBillionaireMenu(void);
 
-void printBillionaires(void);
+void printAllBillionaires(void);
 
 void handleInput(void);
 void handleExit(void);
@@ -100,6 +100,7 @@ void handleInput() {
             printAddBillionaireMenu();
             break;
         case 2:
+            printAllBillionaires();
             break;
         case 3:
             break;
@@ -168,7 +169,7 @@ void printAddBillionaireMenu() {
 
 }
 
-void printBillionaires(void) {
+void printAllBillionaires(void) {
     printf("==================================================\n");
     printf("                WORLDS BILLIONAIRES               \n");
     printf("==================================================\n");
