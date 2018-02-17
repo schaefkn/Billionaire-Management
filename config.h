@@ -5,7 +5,6 @@
 // Welcome Message
 #define welcomeMessage "Welcome Forbes Billionaires List"
 
-
 // Menue Items
 #define menueItem1 "Add Billionaire"
 #define menueItem2 "Show Billionaires"
