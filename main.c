@@ -126,6 +126,23 @@ void handleExit() {
     exit(0);
 }
 
+void printMenu(void) {
+    printf("==================================================\n");
+    printf("                      MENUE                       \n");
+    printf("==================================================\n");
+    printf("(1) - %s\n", menueItem1);
+    printf("(2) - %s\n", menueItem2);
+    printf("(3) - %s\n", menueItem3);
+    printf("(4) - %s\n", menueItem4);
+    printf("(5) - %s\n", menueItem5);
+    printf("(6) - %s\n", menueItem6);
+    printf("(7) - %s\n", menueItem7);
+    printf("(8) - %s\n", menueItem8);
+    printf("(9) - %s\n", menueItem9);
+    printf("(0) - %s\n", menueItem0);
+    printf("\n");
+}
+
 void printAddBillionaireMenu() {
     char name[128+1];
     char surname[128+1];
@@ -149,21 +166,4 @@ void printAddBillionaireMenu() {
     printf("\n");
     printf("%s %s was added to the list of Billionaires!\n", name, surname);
 
-}
-
-void printMenu(void) {
-    printf("==================================================\n");
-    printf("                      MENUE                       \n");
-    printf("==================================================\n");
-    printf("(1) - %s\n", menueItem1);
-    printf("(2) - %s\n", menueItem2);
-    printf("(3) - %s\n", menueItem3);
-    printf("(4) - %s\n", menueItem4);
-    printf("(5) - %s\n", menueItem5);
-    printf("(6) - %s\n", menueItem6);
-    printf("(7) - %s\n", menueItem7);
-    printf("(8) - %s\n", menueItem8);
-    printf("(9) - %s\n", menueItem9);
-    printf("(0) - %s\n", menueItem0);
-    printf("\n");
 }
