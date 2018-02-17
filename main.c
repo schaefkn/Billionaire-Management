@@ -153,7 +153,7 @@ void printAddBillionaireMenu() {
     printf("==================================================\n");
     printf("                  ADD BILLIONAIRE                 \n");
     printf("==================================================\n");
-    printf("Name: ");
+    printf("First Name: ");
     scanf("%s", name);
     printf("Last Name: ");
     scanf("%s", surname);
