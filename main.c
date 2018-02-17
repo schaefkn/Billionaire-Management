@@ -47,7 +47,7 @@ int main(void) {
     }
 }
 
-struct billionaire_t* balloc() {
+struct billionaire_t* balloc(void) {
     return (struct billionaire_t*) malloc(sizeof(struct billionaire_t));;
 }
 
@@ -83,7 +83,7 @@ void createBillionaire(char name[], char surname[], float net_worth, int selfmad
     addBillionaireToLinkedList(tmp);
 }
 
-int getInput() {
+int getInput(void) {
     int input = -1;
 
     do {
@@ -94,7 +94,7 @@ int getInput() {
     return input;
 }
 
-void handleInput() {
+void handleInput(void) {
     int selection = getInput();
 
     switch (selection) {
@@ -125,7 +125,7 @@ void handleInput() {
     }
 }
 
-void handleExit() {
+void handleExit(void) {
     exit(0);
 }
 
@@ -153,7 +153,7 @@ void printMenu(void) {
     printf("\n");
 }
 
-void printAddBillionaireMenu() {
+void printAddBillionaireMenu(void) {
     char name[128+1];
     char surname[128+1];
     float net_worth = 0;
