@@ -24,7 +24,7 @@ void addBillionaire(void);
 void addBillionaireToLinkedList(struct billionaire_t *billionaire);
 void createBillionaire(char name[], char surname[], float net_worth, int selfmade_score);
 
-void printMenue(void);
+void printMenu(void);
 void printAddBillionaireMenu(void);
 void handleInput(void);
 void handleExit(void);
@@ -37,7 +37,7 @@ struct billionaire_t *current;
 
 int main(void) {
     while(true) {
-        printMenue();
+        printMenu();
         handleInput();
     }
 }
@@ -133,7 +133,7 @@ void printAddBillionaireMenu() {
     printf("==================================================\n");
 }
 
-void printMenue(void) {
+void printMenu(void) {
     printf("==================================================\n");
     printf("                      MENUE                       \n");
     printf("==================================================\n");
