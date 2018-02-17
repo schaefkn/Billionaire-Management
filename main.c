@@ -27,7 +27,11 @@ void printGreeting(void);
 void printMenu(void);
 void printAddBillionaireMenu(void);
 
+void printWhitespace(int number);
+void printWhitespaceOnce(void);
+
 void printAllBillionaires(void);
+void printBillionareProperties(struct billionaire_t* billionaire, int number);
 
 void handleInput(void);
 void handleExit(void);
@@ -54,7 +58,7 @@ struct billionaire_t* balloc(void) {
 struct billionaire_t* fillBillonaire(char name[], char surname[], float net_worth, int selfmade_score) {
     struct billionaire_t* tmp = balloc();
     strcpy(tmp->name, name);
-    strcpy(tmp->surname, name);
+    strcpy(tmp->surname, surname);
     tmp->net_worth = net_worth;
     tmp->selfmade_score = selfmade_score;
     tmp->next = NULL;
@@ -150,7 +154,7 @@ void printMenu(void) {
     printf("(8) - %s\n", menueItem8);
     printf("(9) - %s\n", menueItem9);
     printf("(0) - %s\n", menueItem0);
-    printf("\n");
+    printWhitespaceOnce();
 }
 
 void printAddBillionaireMenu(void) {
@@ -173,7 +177,7 @@ void printAddBillionaireMenu(void) {
 
     createBillionaire(name, surname, net_worth, selfmade_score);
     
-    printf("\n");
+    printWhitespaceOnce();
     printf("%s %s was added to the list of Billionaires!\n", name, surname);
 
 }
@@ -182,4 +186,42 @@ void printAllBillionaires(void) {
     printf("==================================================\n");
     printf("                WORLDS BILLIONAIRES               \n");
     printf("==================================================\n");
+
+    printWhitespace(2);
+
+    if(head == NULL) {
+        printf("There are no Billionaires in your list!\n");
+        printWhitespace(2);
+    } else {
+        int number = 1;
+        current = head;
+        printBillionareProperties(current, number);
+        while(current->next != NULL) {
+            number++;
+            current = current->next;
+            printBillionareProperties(current, number);
+        }
+        printWhitespaceOnce();
+    }
+
+}
+
+void printBillionareProperties(struct billionaire_t* billionaire, int number) {
+    printf("================= Billionaire %d =================\n", number);
+    printf("First Name: %s\n", billionaire->name);
+    printf("Last Name: %s\n", billionaire->surname);
+    printf("Net-Worth: $%0.2f Billion Dollars.\n", billionaire->net_worth);
+    printf("Selfmade-Score: %d\n", billionaire->selfmade_score);
+    printWhitespaceOnce();
+}
+
+void printWhitespaceOnce(void) {
+    printWhitespace(1);
+}
+
+
+void printWhitespace(int number) {
+    for (int i = 0; i < number; ++i) {
+        printf("\n");
+    }
 }
