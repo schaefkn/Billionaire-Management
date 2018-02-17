@@ -13,6 +13,6 @@
 #define menueItem5 "Save in file"
 #define menueItem6 "Load from file"
 #define menueItem7 "Search for ..."
-#define menueItem8 "Calculate memory"
+#define menueItem8 "Calculate memory"       // Y
 #define menueItem9 "Edit Billionaire"
-#define menueItem0 "Exit"
+#define menueItem0 "Exit"                   // Y

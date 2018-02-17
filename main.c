@@ -25,6 +25,9 @@ void addBillionaireToLinkedList(struct billionaire_t *billionaire);
 void createBillionaire(char name[], char surname[], float net_worth, int selfmade_score);
 void deleteBillionaireFromList(int index);
 
+void getMemorySizeAllocated(void);
+int getLengthOfLinkedList(void);
+
 void printGreeting(void);
 void printMenu(void);
 void printAddBillionaireMenu(void);
@@ -34,8 +37,8 @@ void printShowBillionaires(void);
 void printWhitespace(int times);
 void printWhitespaceOnce(void);
 
-int printAllBillionares(void);
-void printBillionareProperties(struct billionaire_t* billionaire, int number);
+int printAllBillionares(bool shortened);
+void printBillionareProperties(struct billionaire_t* billionaire, int number, bool shortened);
 
 void handleInput(void);
 void handleExit(void);
@@ -148,6 +151,26 @@ void deleteBillionaireFromList(int index) {
     }
 }
 
+void getMemorySizeAllocated(void) {
+    printf("%lu Bytes allocated\n", getLengthOfLinkedList() * sizeof(struct billionaire_t));
+}
+
+int getLengthOfLinkedList(void) {
+    struct billionaire_t* current = head;
+    int i = 1;
+
+    if(current != NULL) {
+        while (current->next != NULL) {
+            i++;
+            current = current->next;
+        }
+    } else {
+        i = 0;
+    }
+
+    return i;
+}
+
 int getInput(int min, int max) {
     int input = -1;
 
@@ -181,6 +204,7 @@ void handleInput(void) {
         case 7:
             break;
         case 8:
+            getMemorySizeAllocated();
             break;
         case 9:
             break;
@@ -259,7 +283,7 @@ void printShowBillionaires(void) {
     printf("                WORLDS BILLIONAIRES               \n");
     printf("==================================================\n");
 
-    printAllBillionares();
+    printAllBillionares(false);
 }
 
 void printDeleteBillionaireMenu(void) {
@@ -267,14 +291,15 @@ void printDeleteBillionaireMenu(void) {
     printf("                DELETE BILLIONAIRE                \n");
     printf("==================================================\n");
 
-    int number = printAllBillionares();
+    int number = printAllBillionares(true);
+    printWhitespaceOnce();
     if(number != -1) {
         int input = getInput(1, number) - 1;
         deleteBillionaireFromList(input);
     }
 }
 
-int printAllBillionares(void) {
+int printAllBillionares(bool shortened) {
     printWhitespace(2);
 
     if(head == NULL) {
@@ -284,24 +309,28 @@ int printAllBillionares(void) {
     } else {
         int number = 1;
         current = head;
-        printBillionareProperties(current, number);
+        printBillionareProperties(current, number, shortened);
         while(current->next != NULL) {
             number++;
             current = current->next;
-            printBillionareProperties(current, number);
+            printBillionareProperties(current, number, shortened);
         }
-        printWhitespace(2);
+        printWhitespaceOnce();
         return number;
     }
 }
 
-void printBillionareProperties(struct billionaire_t* billionaire, int number) {
-    printf("================= Billionaire %d =================\n", number);
-    printf("First Name: %s\n", billionaire->name);
-    printf("Last Name: %s\n", billionaire->surname);
-    printf("Net-Worth: $%0.2f Billion Dollars.\n", billionaire->net_worth);
-    printf("Selfmade-Score: %d\n", billionaire->selfmade_score);
-    printWhitespaceOnce();
+void printBillionareProperties(struct billionaire_t* billionaire, int number, bool shortened) {
+    if(shortened) {
+        printf("Billionaire (%d): %s %s\n", number, billionaire->name, billionaire->surname);
+    } else {
+        printf("================= Billionaire %d =================\n", number);
+        printf("First Name: %s\n", billionaire->name);
+        printf("Last Name: %s\n", billionaire->surname);
+        printf("Net-Worth: $%0.2f Billion Dollars.\n", billionaire->net_worth);
+        printf("Selfmade-Score: %d\n", billionaire->selfmade_score);
+        printWhitespaceOnce();
+    }
 }
 
 void printWhitespaceOnce(void) {
