@@ -137,7 +137,6 @@ void printGreeting(void) {
     printf("==================================================\n");
     printf("          Welcome Forbes Billionaires List        \n");
     printf("                   Version: 0.0.1                 \n");
-    printf("==================================================\n");
 }
 
 void printMenu(void) {
