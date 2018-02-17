@@ -20,10 +20,12 @@ struct billionaire_t {
 struct billionaire_t* balloc();
 struct billionaire_t* fillBillonaire(char name[], char surname[], float net_worth, int selfmade_score);
 
-void addBillionaire(struct billionaire_t* billionaire);
+void addBillionaire(void);
+void addBillionaireToLinkedList(struct billionaire_t *billionaire);
 void createBillionaire(char name[], char surname[], float net_worth, int selfmade_score);
 
 void printMenue(void);
+void printAddBillionaireMenu(void);
 void handleInput(void);
 void handleExit(void);
 
@@ -56,7 +58,11 @@ struct billionaire_t* fillBillonaire(char name[], char surname[], float net_wort
     return tmp;
 }
 
-void addBillionaire(struct billionaire_t* billionaire) {
+void addBillionaire() {
+
+}
+
+void addBillionaireToLinkedList(struct billionaire_t *billionaire) {
     struct billionaire_t* current = head;
 
     if(head == NULL)
@@ -73,7 +79,7 @@ void addBillionaire(struct billionaire_t* billionaire) {
 
 void createBillionaire(char name[], char surname[], float net_worth, int selfmade_score) {
     struct billionaire_t* tmp = fillBillonaire(name, surname, net_worth, selfmade_score);
-    addBillionaire(tmp);
+    addBillionaireToLinkedList(tmp);
 }
 
 int getInput() {
@@ -92,6 +98,7 @@ void handleInput() {
 
     switch (selection) {
         case 1:
+            printAddBillionaireMenu();
             break;
         case 2:
             break;
@@ -118,6 +125,12 @@ void handleInput() {
 
 void handleExit() {
     exit(0);
+}
+
+void printAddBillionaireMenu() {
+    printf("==================================================\n");
+    printf("                  ADD BILLIONAIRE                 \n");
+    printf("==================================================\n");
 }
 
 void printMenue(void) {
