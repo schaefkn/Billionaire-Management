@@ -17,8 +17,3 @@
 #define menueItem8 "Calculate memory"
 #define menueItem9 "Edit Billionaire"
 #define menueItem0 "Exit"
-
-
-
-
-
