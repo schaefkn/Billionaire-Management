@@ -25,8 +25,12 @@ void createBillionaire(char name[], char surname[], float net_worth, int selfmad
 
 void printMenu(void);
 void printAddBillionaireMenu(void);
+
+void printBillionaires(void);
+
 void handleInput(void);
 void handleExit(void);
+
 
 int getInput();
 
