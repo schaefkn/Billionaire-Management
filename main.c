@@ -128,9 +128,28 @@ void handleExit() {
 }
 
 void printAddBillionaireMenu() {
+    char name[128+1];
+    char surname[128+1];
+    float net_worth = 0;
+    int selfmade_score = 0;
+
     printf("==================================================\n");
     printf("                  ADD BILLIONAIRE                 \n");
     printf("==================================================\n");
+    printf("Name: ");
+    scanf("%s", name);
+    printf("Last Name: ");
+    scanf("%s", surname);
+    printf("Net-Worth in Billion Dollars: ");
+    scanf("%f", &net_worth);
+    printf("Selfmade-Score: ");
+    scanf("%d", &selfmade_score);
+
+    createBillionaire(name, surname, net_worth, selfmade_score);
+    
+    printf("\n");
+    printf("%s %s was added to the list of Billionaires!\n", name, surname);
+
 }
 
 void printMenu(void) {
