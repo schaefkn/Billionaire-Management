@@ -122,6 +122,8 @@ void handleExit() {
 
 void printMenue(void) {
     printf("==================================================\n");
+    printf("                      MENUE                       \n");
+    printf("==================================================\n");
     printf("(1) - %s\n", menueItem1);
     printf("(2) - %s\n", menueItem2);
     printf("(3) - %s\n", menueItem3);
