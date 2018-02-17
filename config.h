@@ -6,9 +6,9 @@
 #define welcomeMessage "Welcome Forbes Billionaires List"
 
 // Menue Items
-#define menueItem1 "Add Billionaire"
-#define menueItem2 "Show Billionaires"
-#define menueItem3 "Delete Billionaire"
+#define menueItem1 "Add Billionaire"        // Y
+#define menueItem2 "Show Billionaires"      // Y
+#define menueItem3 "Delete Billionaire"     // Y
 #define menueItem4 "Sort Billionaires"
 #define menueItem5 "Save in file"
 #define menueItem6 "Load from file"

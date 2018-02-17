@@ -29,11 +29,12 @@ void printGreeting(void);
 void printMenu(void);
 void printAddBillionaireMenu(void);
 void printDeleteBillionaireMenu(void);
+void printShowBillionaires(void);
 
 void printWhitespace(int times);
 void printWhitespaceOnce(void);
 
-void printAllBillionaires(void);
+int printAllBillionares(void);
 void printBillionareProperties(struct billionaire_t* billionaire, int number);
 
 void handleInput(void);
@@ -56,8 +57,6 @@ void insertSampleData(void) {
 int main(void) {
     printGreeting();
     insertSampleData();
-    deleteBillionaireFromList(1);
-    deleteBillionaireFromList(1);
     while(true) {
         printMenu();
         handleInput();
@@ -168,7 +167,7 @@ void handleInput(void) {
             printAddBillionaireMenu();
             break;
         case 2:
-            printAllBillionaires();
+            printShowBillionaires();
             break;
         case 3:
             printDeleteBillionaireMenu();
@@ -255,28 +254,12 @@ void printAddBillionaireMenu(void) {
     printWhitespaceOnce();
 }
 
-void printAllBillionaires(void) {
+void printShowBillionaires(void) {
     printf("==================================================\n");
     printf("                WORLDS BILLIONAIRES               \n");
     printf("==================================================\n");
 
-    printWhitespace(2);
-
-    if(head == NULL) {
-        printf("There are no Billionaires in your list!\n");
-        printWhitespace(2);
-    } else {
-        int number = 1;
-        current = head;
-        printBillionareProperties(current, number);
-        while(current->next != NULL) {
-            number++;
-            current = current->next;
-            printBillionareProperties(current, number);
-        }
-        printWhitespaceOnce();
-    }
-
+    printAllBillionares();
 }
 
 void printDeleteBillionaireMenu(void) {
@@ -284,8 +267,20 @@ void printDeleteBillionaireMenu(void) {
     printf("                DELETE BILLIONAIRE                \n");
     printf("==================================================\n");
 
+    int number = printAllBillionares();
+    if(number != -1) {
+        int input = getInput(1, number) - 1;
+        deleteBillionaireFromList(input);
+    }
+}
+
+int printAllBillionares(void) {
+    printWhitespace(2);
+
     if(head == NULL) {
-        printf("There are no Billionares in your list!\n");
+        printf("There are no Billionaires in your list!\n");
+        printWhitespace(2);
+        return -1;
     } else {
         int number = 1;
         current = head;
@@ -295,10 +290,8 @@ void printDeleteBillionaireMenu(void) {
             current = current->next;
             printBillionareProperties(current, number);
         }
-        printWhitespaceOnce();
-
-        int input = getInput(0, number);
-        deleteBillionaireFromList(input);
+        printWhitespace(2);
+        return number;
     }
 }
 
