@@ -178,7 +178,18 @@ void printAddBillionaireMenu(void) {
     
     printWhitespaceOnce();
     printf("%s %s was added to the list of Billionaires!\n", name, surname);
+    printf("Do you want to add another Billionaire ? y/n: ");
 
+    char selection;
+    scanf(" %c", &selection);
+    getchar();
+
+    if(selection == 'y'|| selection == 'Y') {
+        printWhitespaceOnce();
+        printAddBillionaireMenu();
+    }
+
+    printWhitespaceOnce();
 }
 
 void printAllBillionaires(void) {
