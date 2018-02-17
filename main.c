@@ -167,3 +167,9 @@ void printAddBillionaireMenu() {
     printf("%s %s was added to the list of Billionaires!\n", name, surname);
 
 }
+
+void printBillionaires(void) {
+    printf("==================================================\n");
+    printf("                WORLDS BILLIONAIRES               \n");
+    printf("==================================================\n");
+}
