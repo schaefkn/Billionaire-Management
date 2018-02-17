@@ -33,6 +33,7 @@ void printMenu(void);
 void printAddBillionaireMenu(void);
 void printDeleteBillionaireMenu(void);
 void printShowBillionaires(void);
+void printEditBillionaires(void);
 
 void printWhitespace(int times);
 void printWhitespaceOnce(void);
@@ -207,6 +208,7 @@ void handleInput(void) {
             getMemorySizeAllocated();
             break;
         case 9:
+            printEditBillionaires();
             break;
         case 0:
             handleExit();
@@ -296,6 +298,19 @@ void printDeleteBillionaireMenu(void) {
     if(number != -1) {
         int input = getInput(1, number) - 1;
         deleteBillionaireFromList(input);
+    }
+}
+
+void printEditBillionaires(void) {
+    printf("==================================================\n");
+    printf("                 EDIT BILLIONAIRE                 \n");
+    printf("==================================================\n");
+
+    int number = printAllBillionares(true);
+    printWhitespaceOnce();
+    if(number != -1) {
+        int input = getInput(1, number) - 1;
+        editBillionareFromList(input);
     }
 }
 
