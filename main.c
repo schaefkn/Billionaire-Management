@@ -24,6 +24,7 @@ struct billionaire_t* getBillionaireByIndex(int index);
 void addBillionaireToLinkedList(struct billionaire_t *billionaire);
 void createBillionaire(char name[], char surname[], float net_worth, int selfmade_score);
 void deleteBillionaireFromList(int index);
+void editBillionaireFromList(int index);
 
 void getMemorySizeAllocated(void);
 int getLengthOfLinkedList(void);
@@ -309,9 +310,42 @@ void printEditBillionaires(void) {
     int number = printAllBillionares(true);
     printWhitespaceOnce();
     if(number != -1) {
-        int input = getInput(1, number) - 1;
-        editBillionareFromList(input);
+        int index = getInput(1, number) - 1;
+        editBillionaireFromList(index);
     }
+}
+
+void editBillionaireFromList(int index) {
+    struct billionaire_t* billionaireToEdit = getBillionaireByIndex(index);
+    printBillionareProperties(billionaireToEdit, 0, false);
+    printf("Which Property do you want to edit ?\n");
+    printf("(1) First Name\n");
+    printf("(2) Last Name\n");
+    printf("(3) Net Worth\n");
+    printf("(4) Selfmade-Score\n");
+    int input = getInput(1, 4);
+
+    switch(input) {
+        case 1:
+            printf("New First Name: ");
+            scanf("%s", billionaireToEdit->name);
+            break;
+        case 2:
+            printf("New Last Name: ");
+            scanf("%s", billionaireToEdit->surname);
+            break;
+        case 3:
+            printf("New Net-worth: ");
+            scanf("%f", &billionaireToEdit->net_worth);
+            break;
+        case 4:
+            printf("New Selfmade-Score: ");
+            scanf("%d", &billionaireToEdit->selfmade_score);
+            break;
+        default:
+            break;
+    }
+
 }
 
 int printAllBillionares(bool shortened) {

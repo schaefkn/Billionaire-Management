@@ -14,5 +14,5 @@
 #define menueItem6 "Load from file"
 #define menueItem7 "Search for ..."
 #define menueItem8 "Calculate memory"       // Y
-#define menueItem9 "Edit Billionaire"
+#define menueItem9 "Edit Billionaire"       // Y
 #define menueItem0 "Exit"                   // Y
