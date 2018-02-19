@@ -25,6 +25,7 @@ void addBillionaireToLinkedList(struct billionaire_t *billionaire);
 void createBillionaire(char name[], char surname[], float net_worth, int selfmade_score);
 void deleteBillionaireFromList(int index);
 void editBillionaireFromList(int index);
+void swapBillionaireWithNextBillionaire(int index);
 
 void getMemorySizeAllocated(void);
 int getLengthOfLinkedList(void);
@@ -62,6 +63,10 @@ void insertSampleData(void) {
 int main(void) {
     printGreeting();
     insertSampleData();
+    swapBillionaireWithNextBillionaire(0);
+    swapBillionaireWithNextBillionaire(1);
+    swapBillionaireWithNextBillionaire(0);
+
     while(true) {
         printMenu();
         handleInput();
@@ -161,8 +166,8 @@ int getLengthOfLinkedList(void) {
     struct billionaire_t* current = head;
     int i = 1;
 
-    if(current != NULL) {
-        while (current->next != NULL) {
+    if(current) {
+        while (current->next) {
             i++;
             current = current->next;
         }
@@ -345,7 +350,23 @@ void editBillionaireFromList(int index) {
         default:
             break;
     }
+}
 
+void swapBillionaireWithNextBillionaire(int index) {
+    struct billionaire_t* billionaireToSwap = getBillionaireByIndex(index);
+    struct billionaire_t* billionaireAfter = billionaireToSwap->next;
+
+    if(billionaireAfter) {
+        billionaireToSwap->next = billionaireAfter->next;
+        billionaireAfter->prev = billionaireToSwap->prev;
+        billionaireAfter->next = billionaireToSwap;
+        billionaireToSwap->prev = billionaireAfter;
+
+        if(billionaireToSwap->next) billionaireToSwap->next->prev = billionaireToSwap;
+        if(billionaireAfter->prev) billionaireAfter->prev->next = billionaireAfter;
+        if(billionaireAfter == tail) tail = billionaireToSwap;
+        if(billionaireToSwap == head) head = billionaireAfter;
+    }
 }
 
 int printAllBillionares(bool shortened) {
