@@ -33,9 +33,10 @@ int getLengthOfLinkedList(void);
 void printGreeting(void);
 void printMenu(void);
 void printAddBillionaireMenu(void);
-void printDeleteBillionaireMenu(void);
-void printShowBillionaires(void);
-void printEditBillionaires(void);
+void printDeleteBillionairesMenu(void);
+void printShowBillionairesMenu(void);
+void printEditBillionairesMenu(void);
+void printSortBillionairesMenu(void);
 
 void printWhitespace(int times);
 void printWhitespaceOnce(void);
@@ -46,6 +47,9 @@ void printBillionareProperties(struct billionaire_t* billionaire, int number, bo
 void handleInput(void);
 void handleExit(void);
 
+void sortBillionairesByCategory(int category);
+bool billionaireComesBefore(int category, struct billionaire_t* first, struct billionaire_t* second);
+
 
 int getInput(int min, int max);
 
@@ -55,17 +59,16 @@ struct billionaire_t *current;
 
 
 void insertSampleData(void) {
-    createBillionaire("Jeff", "Bezos", 120.8, 8);
     createBillionaire("Bill", "Gates", 91.7, 8);
+    createBillionaire("Jeff", "Bezos", 120.8, 8);
     createBillionaire("Warren", "Buffet", 87.5, 8);
+    createBillionaire("Berta", "Berta", 200, 10);
+    createBillionaire("Alpha", "Centaury", 201, 10);
 }
 
 int main(void) {
     printGreeting();
     insertSampleData();
-    swapBillionaireWithNextBillionaire(0);
-    swapBillionaireWithNextBillionaire(1);
-    swapBillionaireWithNextBillionaire(0);
 
     while(true) {
         printMenu();
@@ -197,12 +200,13 @@ void handleInput(void) {
             printAddBillionaireMenu();
             break;
         case 2:
-            printShowBillionaires();
+            printShowBillionairesMenu();
             break;
         case 3:
-            printDeleteBillionaireMenu();
+            printDeleteBillionairesMenu();
             break;
         case 4:
+            printSortBillionairesMenu();
             break;
         case 5:
             break;
@@ -214,7 +218,7 @@ void handleInput(void) {
             getMemorySizeAllocated();
             break;
         case 9:
-            printEditBillionaires();
+            printEditBillionairesMenu();
             break;
         case 0:
             handleExit();
@@ -286,7 +290,7 @@ void printAddBillionaireMenu(void) {
     printWhitespaceOnce();
 }
 
-void printShowBillionaires(void) {
+void printShowBillionairesMenu(void) {
     printf("==================================================\n");
     printf("                WORLDS BILLIONAIRES               \n");
     printf("==================================================\n");
@@ -294,7 +298,7 @@ void printShowBillionaires(void) {
     printAllBillionares(false);
 }
 
-void printDeleteBillionaireMenu(void) {
+void printDeleteBillionairesMenu(void) {
     printf("==================================================\n");
     printf("                DELETE BILLIONAIRE                \n");
     printf("==================================================\n");
@@ -307,7 +311,7 @@ void printDeleteBillionaireMenu(void) {
     }
 }
 
-void printEditBillionaires(void) {
+void printEditBillionairesMenu(void) {
     printf("==================================================\n");
     printf("                 EDIT BILLIONAIRE                 \n");
     printf("==================================================\n");
@@ -318,6 +322,22 @@ void printEditBillionaires(void) {
         int index = getInput(1, number) - 1;
         editBillionaireFromList(index);
     }
+}
+
+void printSortBillionairesMenu(void) {
+    printf("==================================================\n");
+    printf("                 SORT BILLIONAIRE                 \n");
+    printf("==================================================\n");
+    printf("On which property do you want to sort ?\n");
+    printf("(1) First Name\n");
+    printf("(2) Last Name\n");
+    printf("(3) Net-Worth\n");
+    printf("(4) Selfmade-Score\n");
+
+    printWhitespaceOnce();
+    int input = getInput(1, 4);
+
+    sortBillionairesByCategory(input);
 }
 
 void editBillionaireFromList(int index) {
@@ -349,6 +369,47 @@ void editBillionaireFromList(int index) {
             break;
         default:
             break;
+    }
+}
+
+void sortBillionairesByCategory(int category) {
+    for(int i = getLengthOfLinkedList(); i > 1; i--) {
+        for(int n = 0; n < i -1; n++) {
+            struct billionaire_t* current = getBillionaireByIndex(n);
+            if(!billionaireComesBefore(category, current, current->next)) {
+                swapBillionaireWithNextBillionaire(n);
+            }
+        }
+    }
+}
+
+bool billionaireComesBefore(int category, struct billionaire_t* first, struct billionaire_t* second) {
+    if(first == NULL || second == NULL)
+        return false;
+
+    switch(category) {
+        case 1:
+            if(strcmp(first->name, second->name) < 0)
+                return true;
+            else
+                return false;
+        case 2:
+            if(strcmp(first->surname, second->surname) < 0)
+                return true;
+            else
+                return false;
+        case 3:
+            if(first->net_worth > second->net_worth)
+                return true;
+            else
+                return false;
+        case 4:
+            if(first->selfmade_score > second->selfmade_score)
+                return true;
+            else
+                return false;
+        default:
+            return false;
     }
 }
 
@@ -404,7 +465,7 @@ void printBillionareProperties(struct billionaire_t* billionaire, int number, bo
 }
 
 void printWhitespaceOnce(void) {
-    printWhitespace(1);
+    printf("\n");
 }
 
 void printWhitespace(int times) {

@@ -9,7 +9,7 @@
 #define menueItem1 "Add Billionaire"        // Y
 #define menueItem2 "Show Billionaires"      // Y
 #define menueItem3 "Delete Billionaire"     // Y
-#define menueItem4 "Sort Billionaires"
+#define menueItem4 "Sort Billionaires"      // Y
 #define menueItem5 "Save in file"
 #define menueItem6 "Load from file"
 #define menueItem7 "Search for ..."
