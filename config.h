@@ -16,3 +16,5 @@
 #define menueItem8 "Calculate memory"       // Y
 #define menueItem9 "Edit Billionaire"       // Y
 #define menueItem0 "Exit"                   // Y
+
+// TODO: No Global Variables!

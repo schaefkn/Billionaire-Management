@@ -17,6 +17,11 @@ struct billionaire_t {
     struct billionaire_t* prev;
 };
 
+struct billionaire_management {
+    struct billionaire_t* head;
+    struct billionaire_t tail;
+};
+
 struct billionaire_t* balloc();
 struct billionaire_t* fillBillonaire(char name[], char surname[], float net_worth, int selfmade_score);
 struct billionaire_t* getBillionaireByIndex(int index);
@@ -26,6 +31,9 @@ void createBillionaire(char name[], char surname[], float net_worth, int selfmad
 void deleteBillionaireFromList(int index);
 void editBillionaireFromList(int index);
 void swapBillionaireWithNextBillionaire(int index);
+void sortBillionairesByCategory(int category);
+bool billionaireComesBefore(int category, struct billionaire_t* first, struct billionaire_t* second);
+bool searchForProperty(int property, struct billionaire_t* current, char searchFor[]);
 
 void getMemorySizeAllocated(void);
 int getLengthOfLinkedList(void);
@@ -38,6 +46,8 @@ void printShowBillionairesMenu(void);
 void printEditBillionairesMenu(void);
 void printSortBillionairesMenu(void);
 void printSearchForBillionairesMenu(void);
+void printSafeInFileMenue(void);
+void printLoadFromFileMenue(void);
 
 void printWhitespace(int times);
 void printWhitespaceOnce(void);
@@ -47,13 +57,6 @@ void printBillionareProperties(struct billionaire_t* billionaire, int number, bo
 
 void handleInput(void);
 void handleExit(void);
-
-void sortBillionairesByCategory(int category);
-bool billionaireComesBefore(int category, struct billionaire_t* first, struct billionaire_t* second);
-
-
-bool searchForProperty(int property, struct billionaire_t* current, char searchFor[]);
-
 
 int getInput(int min, int max);
 
@@ -213,8 +216,10 @@ void handleInput(void) {
             printSortBillionairesMenu();
             break;
         case 5:
+            printSafeInFileMenue();
             break;
         case 6:
+            printLoadFromFileMenue();
             break;
         case 7:
             printSearchForBillionairesMenu();
