@@ -5,7 +5,7 @@
 
 typedef enum { false, true } bool;
 
-struct billionaire_t {
+typedef struct billionaire_t {
     // Contained Data
     char name[128+1];
     char surname[128+1];
@@ -15,12 +15,12 @@ struct billionaire_t {
     // Pointers to next and previous list entry
     struct billionaire_t* next;
     struct billionaire_t* prev;
-};
+} Billionaire;
 
-struct billionaire_management {
+typedef struct billionaire_management {
     struct billionaire_t* head;
     struct billionaire_t* tail;
-};
+} BillionaireManagement;
 
 struct billionaire_t* balloc();
 struct billionaire_t* fillBillonaire(char name[], char surname[], float net_worth, int selfmade_score);
@@ -46,8 +46,8 @@ void printShowBillionairesMenu(void);
 void printEditBillionairesMenu(void);
 void printSortBillionairesMenu(void);
 void printSearchForBillionairesMenu(void);
-void printSafeInFileMenue(void);
-void printLoadFromFileMenue(void);
+void printSaveInFileMenu(void);
+void printLoadFromFileMenu(void);
 
 void printWhitespace(int times);
 void printWhitespaceOnce(void);
@@ -216,10 +216,10 @@ void handleInput(void) {
             printSortBillionairesMenu();
             break;
         case 5:
-            printSafeInFileMenue();
+            printSaveInFileMenu();
             break;
         case 6:
-            printLoadFromFileMenue();
+            printLoadFromFileMenu();
             break;
         case 7:
             printSearchForBillionairesMenu();
@@ -384,7 +384,7 @@ void printSearchForBillionairesMenu(void) {
     }
 }
 
-void printSafeInFileMenue(void) {
+void printSaveInFileMenu(void) {
     printf("==================================================\n");
     printf("                SAVE BILLIONAIRES                 \n");
     printf("==================================================\n");
@@ -414,7 +414,7 @@ void printSafeInFileMenue(void) {
     printWhitespace(3);
 }
 
-void printLoadFromFileMenue(void) {
+void printLoadFromFileMenu(void) {
     printf("==================================================\n");
     printf("                LOAD BILLIONAIRES                 \n");
     printf("==================================================\n");
