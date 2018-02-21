@@ -37,6 +37,7 @@ void printDeleteBillionairesMenu(void);
 void printShowBillionairesMenu(void);
 void printEditBillionairesMenu(void);
 void printSortBillionairesMenu(void);
+void printSearchForBillionairesMenu(void);
 
 void printWhitespace(int times);
 void printWhitespaceOnce(void);
@@ -49,6 +50,9 @@ void handleExit(void);
 
 void sortBillionairesByCategory(int category);
 bool billionaireComesBefore(int category, struct billionaire_t* first, struct billionaire_t* second);
+
+
+bool searchForProperty(int property, struct billionaire_t* current, char searchFor[]);
 
 
 int getInput(int min, int max);
@@ -213,6 +217,7 @@ void handleInput(void) {
         case 6:
             break;
         case 7:
+            printSearchForBillionairesMenu();
             break;
         case 8:
             getMemorySizeAllocated();
@@ -340,6 +345,74 @@ void printSortBillionairesMenu(void) {
     sortBillionairesByCategory(input);
 }
 
+void printSearchForBillionairesMenu(void) {
+    printf("==================================================\n");
+    printf("                SEARCH BILLIONAIRE                \n");
+    printf("==================================================\n");
+    printf("On which property do you want to search ?\n");
+    printf("(1) First Name\n");
+    printf("(2) Last Name\n");
+    printf("(3) Net-Worth\n");
+    printf("(4) Selfmade-Score\n");
+
+    printWhitespaceOnce();
+    int input = getInput(1, 4);
+
+    char searchString[128+1];
+    printf("Search For: ");
+    scanf("%s", searchString);
+
+    printWhitespace(2);
+
+    bool printedOnce = false;
+
+    for(int i = 0; i < getLengthOfLinkedList(); i++) {
+        struct billionaire_t* current = getBillionaireByIndex(i);
+        if(searchForProperty(input, current, searchString)) {
+            printBillionareProperties(current, i+1, false);
+            printedOnce = true;
+        }
+    }
+
+    if(!printedOnce) {
+        printf("There are no matching Billionaires!\n");
+    }
+}
+
+bool searchForProperty(int property, struct billionaire_t* current, char searchFor[]) {
+
+    char net_worth[64];
+    sprintf(net_worth, "%d", (int) current->net_worth);
+
+    char selfmade_score[32];
+    sprintf(selfmade_score, "%d", current->selfmade_score);
+
+    switch(property) {
+        case 1:
+            if(strstr(current->name, searchFor))
+                return true;
+            else
+                return false;
+        case 2:
+            if(strstr(current->surname, searchFor))
+                return true;
+            else
+                return false;
+        case 3:
+            if(strcmp(net_worth, searchFor) == 0)
+                return true;
+            else
+                return false;
+        case 4:
+            if(strcmp(selfmade_score, searchFor) == 0)
+                return true;
+            else
+                return false;
+        default:
+            return false;
+    }
+}
+
 void editBillionaireFromList(int index) {
     struct billionaire_t* billionaireToEdit = getBillionaireByIndex(index);
     printBillionareProperties(billionaireToEdit, 0, false);
@@ -412,6 +485,7 @@ bool billionaireComesBefore(int category, struct billionaire_t* first, struct bi
             return false;
     }
 }
+
 
 void swapBillionaireWithNextBillionaire(int index) {
     struct billionaire_t* billionaireToSwap = getBillionaireByIndex(index);

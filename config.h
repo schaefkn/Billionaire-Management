@@ -12,7 +12,7 @@
 #define menueItem4 "Sort Billionaires"      // Y
 #define menueItem5 "Save in file"
 #define menueItem6 "Load from file"
-#define menueItem7 "Search for ..."
+#define menueItem7 "Search for ..."         // Y
 #define menueItem8 "Calculate memory"       // Y
 #define menueItem9 "Edit Billionaire"       // Y
 #define menueItem0 "Exit"                   // Y
