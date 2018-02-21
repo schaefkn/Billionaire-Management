@@ -392,7 +392,7 @@ void printSafeInFileMenue(void) {
 
     char file_name[128+1];
     scanf("%s", file_name);
-    sprintf(file_name, "%s.txt", file_name);
+    sprintf(file_name, "%s.csv", file_name);
 
 
     FILE *fileToSaveTo = fopen(file_name, "w");
