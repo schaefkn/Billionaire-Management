@@ -47,7 +47,6 @@ void printEditBillionairesMenu(void);
 void printSortBillionairesMenu(void);
 void printSearchForBillionairesMenu(void);
 void printSafeInFileMenue(void);
-void printLoadFromFileMenue(void);
 
 void printWhitespace(int times);
 void printWhitespaceOnce(void);
@@ -219,7 +218,6 @@ void handleInput(void) {
             printSafeInFileMenue();
             break;
         case 6:
-            printLoadFromFileMenue();
             break;
         case 7:
             printSearchForBillionairesMenu();
@@ -382,6 +380,36 @@ void printSearchForBillionairesMenu(void) {
     if(!printedOnce) {
         printf("There are no matching Billionaires!\n");
     }
+}
+
+void printSafeInFileMenue(void) {
+    printf("==================================================\n");
+    printf("                 SAVE BILLIONAIRE                 \n");
+    printf("==================================================\n");
+    printf("Which file do you want to save too: ");
+
+    char file_name[128+1];
+    scanf("%s", file_name);
+    sprintf(file_name, "%s.txt", file_name);
+
+
+    FILE *fileToSaveTo = fopen(file_name, "w");
+    if(fileToSaveTo == NULL) {
+        printf("Fatal error trying to open file!");
+        return;
+    }
+
+    struct billionaire_t* current = head;
+    while(current->next != NULL) {
+        fprintf(fileToSaveTo, "%s %s %f %d", current->name, current->surname, current->net_worth, current->selfmade_score);
+        fprintf(fileToSaveTo, "\n");
+        current = current->next;
+    }
+
+    fclose(fileToSaveTo);
+    printWhitespaceOnce();
+    printf("Sucessfully saved to file: %s\n", file_name);
+    printWhitespace(3);
 }
 
 bool searchForProperty(int property, struct billionaire_t* current, char searchFor[]) {
