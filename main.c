@@ -19,7 +19,7 @@ struct billionaire_t {
 
 struct billionaire_management {
     struct billionaire_t* head;
-    struct billionaire_t tail;
+    struct billionaire_t* tail;
 };
 
 struct billionaire_t* balloc();
@@ -47,6 +47,7 @@ void printEditBillionairesMenu(void);
 void printSortBillionairesMenu(void);
 void printSearchForBillionairesMenu(void);
 void printSafeInFileMenue(void);
+void printLoadFromFileMenue(void);
 
 void printWhitespace(int times);
 void printWhitespaceOnce(void);
@@ -218,6 +219,7 @@ void handleInput(void) {
             printSafeInFileMenue();
             break;
         case 6:
+            printLoadFromFileMenue();
             break;
         case 7:
             printSearchForBillionairesMenu();
@@ -384,7 +386,7 @@ void printSearchForBillionairesMenu(void) {
 
 void printSafeInFileMenue(void) {
     printf("==================================================\n");
-    printf("                 SAVE BILLIONAIRE                 \n");
+    printf("                SAVE BILLIONAIRES                 \n");
     printf("==================================================\n");
     printf("Which file do you want to save too: ");
 
@@ -399,17 +401,25 @@ void printSafeInFileMenue(void) {
         return;
     }
 
-    struct billionaire_t* current = head;
-    while(current->next != NULL) {
-        fprintf(fileToSaveTo, "%s %s %f %d", current->name, current->surname, current->net_worth, current->selfmade_score);
-        fprintf(fileToSaveTo, "\n");
-        current = current->next;
+    struct billionaire_t* current;
+
+    for(int i = 0; i < getLengthOfLinkedList(); i++) {
+        current = getBillionaireByIndex(i);
+        fprintf(fileToSaveTo, "%s %s %f %d\n", current->name, current->surname, current->net_worth, current->selfmade_score);
     }
 
     fclose(fileToSaveTo);
     printWhitespaceOnce();
     printf("Sucessfully saved to file: %s\n", file_name);
     printWhitespace(3);
+}
+
+void printLoadFromFileMenue(void) {
+    printf("==================================================\n");
+    printf("                LOAD BILLIONAIRES                 \n");
+    printf("==================================================\n");
+    printf("From which file do you want to load: \n");
+
 }
 
 bool searchForProperty(int property, struct billionaire_t* current, char searchFor[]) {
