@@ -24,57 +24,52 @@ typedef struct billionaire_management {
 
 struct billionaire_t* balloc();
 struct billionaire_t* fillBillonaire(char name[], char surname[], float net_worth, int selfmade_score);
-struct billionaire_t* getBillionaireByIndex(int index);
+struct billionaire_t* getBillionaireByIndex(int index, BillionaireManagement *bm);
 
-void addBillionaireToLinkedList(struct billionaire_t *billionaire);
-void createBillionaire(char name[], char surname[], float net_worth, int selfmade_score);
-void deleteBillionaireFromList(int index);
-void deleteAllBillionairesFromLinkedList(void);
-void editBillionaireFromList(int index);
-void swapBillionaireWithNextBillionaire(int index);
-void sortBillionairesByCategory(int category);
+void addBillionaireToLinkedList(struct billionaire_t *billionaire, BillionaireManagement *bm);
+void createBillionaire(char name[], char surname[], float net_worth, int selfmade_score, BillionaireManagement *bm);
+void deleteBillionaireFromList(int index, bool printDeletion, BillionaireManagement *bm);
+void deleteAllBillionairesFromLinkedList(BillionaireManagement *bm);
+void editBillionaireFromList(int index, BillionaireManagement *bm);
+void swapBillionaireWithNextBillionaire(int index, BillionaireManagement *bm);
+void sortBillionairesByCategory(int category, BillionaireManagement *bm);
 bool billionaireComesBefore(int category, struct billionaire_t* first, struct billionaire_t* second);
 bool searchForProperty(int property, struct billionaire_t* current, char searchFor[]);
 
-void getMemorySizeAllocated(void);
-int getLengthOfLinkedList(void);
+int getLengthOfLinkedList(BillionaireManagement *bm);
 
 void printGreeting(void);
 void printMenu(void);
-void printAddBillionaireMenu(void);
-void printDeleteBillionairesMenu(void);
-void printShowBillionairesMenu(void);
-void printEditBillionairesMenu(void);
-void printSortBillionairesMenu(void);
-void printSearchForBillionairesMenu(void);
-void printSaveInFileMenu(void);
-void printLoadFromFileMenu(void);
+void printAddBillionaireMenu(BillionaireManagement *bm);
+void printShowBillionairesMenu(BillionaireManagement *bm);
+void printDeleteBillionairesMenu(BillionaireManagement *bm);
+void printSortBillionairesMenu(BillionaireManagement *bm);
+void printSaveInFileMenu(BillionaireManagement *bm);
+void printLoadFromFileMenu(BillionaireManagement *bm);
+void printSearchForBillionairesMenu(BillionaireManagement *bm);
+void getMemorySizeAllocated(BillionaireManagement *bm);
+void printEditBillionairesMenu(BillionaireManagement *bm);
 
 void printWhitespace(int times);
 void printWhitespaceOnce(void);
 
-int printAllBillionares(bool shortened);
+int printAllBillionares(bool shortened, BillionaireManagement *bm);
 void printBillionareProperties(struct billionaire_t* billionaire, int number, bool shortened);
 
-void handleInput(void);
-void handleExit(void);
+void handleInput(BillionaireManagement *bm);
+void handleExit(BillionaireManagement *bm);
 
 int getInput(int min, int max);
-
-struct billionaire_t *head;
-struct billionaire_t *tail;
-struct billionaire_t *current;
-
 
 const char* getfield(char* line, int num);
 
 
-void insertSampleData(void) {
-    createBillionaire("Bill", "Gates", 91.7, 8);
-    createBillionaire("Jeff", "Bezos", 120.8, 8);
-    createBillionaire("Warren", "Buffet", 87.5, 8);
-    createBillionaire("Berta", "Berta", 200, 10);
-    createBillionaire("Alpha", "Centaury", 201, 10);
+void insertSampleData(BillionaireManagement *bm) {
+    createBillionaire("Bill", "Gates", 91.7, 8, bm);
+    createBillionaire("Jeff", "Bezos", 120.8, 8, bm);
+    createBillionaire("Warren", "Buffet", 87.5, 8, bm);
+    createBillionaire("Berta", "Berta", 200, 10, bm);
+    createBillionaire("Alpha", "Centaury", 201, 10, bm);
 }
 
 int main(void) {
@@ -82,10 +77,11 @@ int main(void) {
     BillionaireManagement bm;
     bm.head = NULL;
     bm.tail = NULL;
+    insertSampleData(&bm);
 
     while(true) {
         printMenu();
-        handleInput();
+        handleInput(&bm);
     }
 }
 
@@ -105,12 +101,12 @@ struct billionaire_t* fillBillonaire(char name[], char surname[], float net_wort
     return tmp;
 }
 
-struct billionaire_t* getBillionaireByIndex(int index) {
+struct billionaire_t* getBillionaireByIndex(int index, BillionaireManagement *bm) {
     if(index == 0) {
-        return head;
+        return bm->head;
     } else {
         int i = 0;
-        struct billionaire_t* billionaireToReturn = head;
+        struct billionaire_t* billionaireToReturn = bm->head;
         while(i < index) {
             if(billionaireToReturn->next != NULL) {
                 i++;
@@ -123,28 +119,26 @@ struct billionaire_t* getBillionaireByIndex(int index) {
     }
 }
 
-void addBillionaireToLinkedList(struct billionaire_t *billionaire) {
-    struct billionaire_t* current = head;
+void addBillionaireToLinkedList(struct billionaire_t *billionaire, BillionaireManagement *bm) {
+    if(bm->head == NULL)
+        bm->head = billionaire;
 
-    if(head == NULL)
-        head = billionaire;
-
-    if(tail == NULL) {
-        tail = billionaire;
+    if(bm->tail == NULL) {
+        bm->tail = billionaire;
     } else {
-        tail->next = billionaire;
-        billionaire->prev = tail;
-        tail = billionaire;
+        bm->tail->next = billionaire;
+        billionaire->prev = bm->tail;
+        bm->tail = billionaire;
     }
 }
 
-void createBillionaire(char name[], char surname[], float net_worth, int selfmade_score) {
+void createBillionaire(char name[], char surname[], float net_worth, int selfmade_score, BillionaireManagement *bm) {
     struct billionaire_t* tmp = fillBillonaire(name, surname, net_worth, selfmade_score);
-    addBillionaireToLinkedList(tmp);
+    addBillionaireToLinkedList(tmp, bm);
 }
 
-void deleteBillionaireFromList(int index) {
-    struct billionaire_t* toDelete = getBillionaireByIndex(index);
+void deleteBillionaireFromList(int index, bool printDeletion, BillionaireManagement *bm) {
+    struct billionaire_t* toDelete = getBillionaireByIndex(index, bm);
     char name[128+1];
     char surname[128+1];
 
@@ -155,31 +149,32 @@ void deleteBillionaireFromList(int index) {
         strcpy(name, toDelete->name);
         strcpy(surname, toDelete->surname);
 
-        if (toDelete == head) {
+        if (toDelete == bm->head) {
             if(toDelete->next != NULL) {
                 toDelete->next->prev = NULL;
-                head = toDelete->next;
+                bm->head = toDelete->next;
             } else {
-                head = NULL;
+                bm->head = NULL;
             }
-        } else if (toDelete == tail) {
+        } else if (toDelete == bm->tail) {
             toDelete->prev->next = NULL;
-            tail = toDelete->prev;
+            bm->tail = toDelete->prev;
         } else {
             toDelete->prev->next = toDelete->next;
             toDelete->next->prev = toDelete->prev;
         }
         free(toDelete);
-        printf("Deleted Billionaire %s %s\n", name, surname);
+        if(printDeletion)
+            printf("Deleted Billionaire %s %s\n", name, surname);
     }
 }
 
-void getMemorySizeAllocated(void) {
-    printf("%lu Bytes allocated\n", getLengthOfLinkedList() * sizeof(struct billionaire_t));
+void getMemorySizeAllocated(BillionaireManagement *bm) {
+    printf("%lu Bytes allocated\n", getLengthOfLinkedList(bm) * sizeof(struct billionaire_t));
 }
 
-int getLengthOfLinkedList(void) {
-    struct billionaire_t* current = head;
+int getLengthOfLinkedList(BillionaireManagement *bm) {
+    struct billionaire_t* current = bm->head;
     int i = 1;
 
     if(current) {
@@ -205,45 +200,46 @@ int getInput(int min, int max) {
     return input;
 }
 
-void handleInput(void) {
+void handleInput(BillionaireManagement *bm) {
     int selection = getInput(0, 9);
 
     switch (selection) {
         case 1:
-            printAddBillionaireMenu();
+            printAddBillionaireMenu(bm);
             break;
         case 2:
-            printShowBillionairesMenu();
+            printShowBillionairesMenu(bm);
             break;
         case 3:
-            printDeleteBillionairesMenu();
+            printDeleteBillionairesMenu(bm);
             break;
         case 4:
-            printSortBillionairesMenu();
+            printSortBillionairesMenu(bm);
             break;
         case 5:
-            printSaveInFileMenu();
+            printSaveInFileMenu(bm);
             break;
         case 6:
-            printLoadFromFileMenu();
+            printLoadFromFileMenu(bm);
             break;
         case 7:
-            printSearchForBillionairesMenu();
+            printSearchForBillionairesMenu(bm);
             break;
         case 8:
-            getMemorySizeAllocated();
+            getMemorySizeAllocated(bm);
             break;
         case 9:
-            printEditBillionairesMenu();
+            printEditBillionairesMenu(bm);
             break;
         case 0:
-            handleExit();
+            handleExit(bm);
         default:
             break;
     }
 }
 
-void handleExit(void) {
+void handleExit(BillionaireManagement *bm) {
+    deleteAllBillionairesFromLinkedList(bm);
     exit(0);
 }
 
@@ -270,7 +266,7 @@ void printMenu(void) {
     printWhitespaceOnce();
 }
 
-void printAddBillionaireMenu(void) {
+void printAddBillionaireMenu(BillionaireManagement *bm) {
     char name[128+1];
     char surname[128+1];
     float net_worth = 0;
@@ -288,7 +284,7 @@ void printAddBillionaireMenu(void) {
     printf("Selfmade-Score: ");
     scanf("%d", &selfmade_score);
 
-    createBillionaire(name, surname, net_worth, selfmade_score);
+    createBillionaire(name, surname, net_worth, selfmade_score, bm);
     
     printWhitespaceOnce();
     printf("%s %s was added to the list of Billionaires!\n", name, surname);
@@ -300,47 +296,47 @@ void printAddBillionaireMenu(void) {
 
     if(selection == 'y'|| selection == 'Y') {
         printWhitespaceOnce();
-        printAddBillionaireMenu();
+        printAddBillionaireMenu(bm);
     }
 
     printWhitespaceOnce();
 }
 
-void printShowBillionairesMenu(void) {
+void printShowBillionairesMenu(BillionaireManagement *bm) {
     printf("==================================================\n");
     printf("                WORLDS BILLIONAIRES               \n");
     printf("==================================================\n");
 
-    printAllBillionares(false);
+    printAllBillionares(false, bm);
 }
 
-void printDeleteBillionairesMenu(void) {
+void printDeleteBillionairesMenu(BillionaireManagement *bm) {
     printf("==================================================\n");
     printf("                DELETE BILLIONAIRE                \n");
     printf("==================================================\n");
 
-    int number = printAllBillionares(true);
+    int number = printAllBillionares(true, bm);
     printWhitespaceOnce();
     if(number != -1) {
         int input = getInput(1, number) - 1;
-        deleteBillionaireFromList(input);
+        deleteBillionaireFromList(input, true, bm);
     }
 }
 
-void printEditBillionairesMenu(void) {
+void printEditBillionairesMenu(BillionaireManagement *bm) {
     printf("==================================================\n");
     printf("                 EDIT BILLIONAIRE                 \n");
     printf("==================================================\n");
 
-    int number = printAllBillionares(true);
+    int number = printAllBillionares(true, bm);
     printWhitespaceOnce();
     if(number != -1) {
         int index = getInput(1, number) - 1;
-        editBillionaireFromList(index);
+        editBillionaireFromList(index, bm);
     }
 }
 
-void printSortBillionairesMenu(void) {
+void printSortBillionairesMenu(BillionaireManagement *bm) {
     printf("==================================================\n");
     printf("                 SORT BILLIONAIRE                 \n");
     printf("==================================================\n");
@@ -353,10 +349,10 @@ void printSortBillionairesMenu(void) {
     printWhitespaceOnce();
     int input = getInput(1, 4);
 
-    sortBillionairesByCategory(input);
+    sortBillionairesByCategory(input, bm);
 }
 
-void printSearchForBillionairesMenu(void) {
+void printSearchForBillionairesMenu(BillionaireManagement *bm) {
     printf("==================================================\n");
     printf("                SEARCH BILLIONAIRE                \n");
     printf("==================================================\n");
@@ -377,8 +373,8 @@ void printSearchForBillionairesMenu(void) {
 
     bool printedOnce = false;
 
-    for(int i = 0; i < getLengthOfLinkedList(); i++) {
-        struct billionaire_t* current = getBillionaireByIndex(i);
+    for(int i = 0; i < getLengthOfLinkedList(bm); i++) {
+        struct billionaire_t* current = getBillionaireByIndex(i, bm);
         if(searchForProperty(input, current, searchString)) {
             printBillionareProperties(current, i+1, false);
             printedOnce = true;
@@ -390,7 +386,7 @@ void printSearchForBillionairesMenu(void) {
     }
 }
 
-void printSaveInFileMenu(void) {
+void printSaveInFileMenu(BillionaireManagement *bm) {
     printf("==================================================\n");
     printf("                SAVE BILLIONAIRES                 \n");
     printf("==================================================\n");
@@ -409,8 +405,8 @@ void printSaveInFileMenu(void) {
 
     struct billionaire_t* current;
 
-    for(int i = 0; i < getLengthOfLinkedList(); i++) {
-        current = getBillionaireByIndex(i);
+    for(int i = 0; i < getLengthOfLinkedList(bm); i++) {
+        current = getBillionaireByIndex(i, bm);
         char net_worth[64];
         sprintf(net_worth, "%f", current->net_worth);
 
@@ -440,13 +436,13 @@ const char* getfield(char* line, int num)
     return NULL;
 }
 
-void deleteAllBillionairesFromLinkedList(void) {
-    for (int i = getLengthOfLinkedList(); i > 0; i--) {
-        deleteBillionaireFromList(i);
+void deleteAllBillionairesFromLinkedList(BillionaireManagement *bm) {
+    for (int i = getLengthOfLinkedList(bm) - 1; i >= 0; i--) {
+        deleteBillionaireFromList(i, false, bm);
     }
 }
 
-void printLoadFromFileMenu(void) {
+void printLoadFromFileMenu(BillionaireManagement *bm) {
     printf("==================================================\n");
     printf("                LOAD BILLIONAIRES                 \n");
     printf("==================================================\n");
@@ -464,7 +460,7 @@ void printLoadFromFileMenu(void) {
         return;
     }
 
-    deleteAllBillionairesFromLinkedList();
+    deleteAllBillionairesFromLinkedList(bm);
 
     char line[1024];
     while(fgets(line, 1024, fileToOpen)) {
@@ -482,7 +478,7 @@ void printLoadFromFileMenu(void) {
         tmp = strdup(line);
         selfmade_score = atoi(getfield(tmp, 4));
 
-        createBillionaire(name, surname, net_worth, selfmade_score);
+        createBillionaire(name, surname, net_worth, selfmade_score, bm);
 
         free(tmp);
     }
@@ -524,8 +520,8 @@ bool searchForProperty(int property, struct billionaire_t* current, char searchF
     }
 }
 
-void editBillionaireFromList(int index) {
-    struct billionaire_t* billionaireToEdit = getBillionaireByIndex(index);
+void editBillionaireFromList(int index, BillionaireManagement *bm) {
+    struct billionaire_t* billionaireToEdit = getBillionaireByIndex(index, bm);
     printBillionareProperties(billionaireToEdit, 0, false);
     printf("Which Property do you want to edit ?\n");
     printf("(1) First Name\n");
@@ -556,12 +552,12 @@ void editBillionaireFromList(int index) {
     }
 }
 
-void sortBillionairesByCategory(int category) {
-    for(int i = getLengthOfLinkedList(); i > 1; i--) {
+void sortBillionairesByCategory(int category, BillionaireManagement *bm) {
+    for(int i = getLengthOfLinkedList(bm); i > 1; i--) {
         for(int n = 0; n < i -1; n++) {
-            struct billionaire_t* current = getBillionaireByIndex(n);
+            struct billionaire_t* current = getBillionaireByIndex(n, bm);
             if(!billionaireComesBefore(category, current, current->next)) {
-                swapBillionaireWithNextBillionaire(n);
+                swapBillionaireWithNextBillionaire(n, bm);
             }
         }
     }
@@ -598,8 +594,8 @@ bool billionaireComesBefore(int category, struct billionaire_t* first, struct bi
 }
 
 
-void swapBillionaireWithNextBillionaire(int index) {
-    struct billionaire_t* billionaireToSwap = getBillionaireByIndex(index);
+void swapBillionaireWithNextBillionaire(int index, BillionaireManagement *bm) {
+    struct billionaire_t* billionaireToSwap = getBillionaireByIndex(index, bm);
     struct billionaire_t* billionaireAfter = billionaireToSwap->next;
 
     if(billionaireAfter) {
@@ -610,21 +606,21 @@ void swapBillionaireWithNextBillionaire(int index) {
 
         if(billionaireToSwap->next) billionaireToSwap->next->prev = billionaireToSwap;
         if(billionaireAfter->prev) billionaireAfter->prev->next = billionaireAfter;
-        if(billionaireAfter == tail) tail = billionaireToSwap;
-        if(billionaireToSwap == head) head = billionaireAfter;
+        if(billionaireAfter == bm->tail) bm->tail = billionaireToSwap;
+        if(billionaireToSwap == bm->head) bm->head = billionaireAfter;
     }
 }
 
-int printAllBillionares(bool shortened) {
+int printAllBillionares(bool shortened, BillionaireManagement *bm) {
+    struct billionaire_t* current = bm->head;
     printWhitespace(2);
 
-    if(head == NULL) {
+    if(current == NULL) {
         printf("There are no Billionaires in your list!\n");
         printWhitespace(2);
         return -1;
     } else {
         int number = 1;
-        current = head;
         printBillionareProperties(current, number, shortened);
         while(current->next != NULL) {
             number++;
