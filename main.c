@@ -733,7 +733,7 @@ void editBillionaireFromList(int index, BillionaireManagement *bm) {
 }
 
 /**
- * Sorts the linked list by the supplied category
+ * Sorts the linked list by the supplied category by using bubble sort.
  * @param category  Category to be checked (1) for Fist Name (2) for Second name (3) for Net-Worth and (4) for Selfmade-Score
  * @param bm BillionaireManagement Pointer
  */
