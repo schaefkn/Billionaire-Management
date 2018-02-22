@@ -60,8 +60,8 @@ void printSearchForBillionairesMenu(BillionaireManagement *bm);
 void getMemorySizeAllocated(BillionaireManagement *bm);
 void printEditBillionairesMenu(BillionaireManagement *bm);
 
-void printWhitespace(int times);
-void printWhitespaceOnce(void);
+void printLineBreak(int times);
+void printLineBreakOnce(void);
 
 int printAllBillionares(bool shortened, BillionaireManagement *bm);
 void printBillionareProperties(struct billionaire_t* billionaire, int number, bool shortened);
@@ -258,6 +258,11 @@ int getLengthOfLinkedList(BillionaireManagement *bm) {
     return i;
 }
 
+int clean_stdin()
+{
+    while (getchar()!='\n');
+    return 1;
+}
 
 /**
  * Gets Input from User, if input is not between min and max user is prompted again, as lang as input is invalid.
@@ -267,11 +272,11 @@ int getLengthOfLinkedList(BillionaireManagement *bm) {
  */
 int getInput(int min, int max) {
     int input = -1;
+    char c;
 
     do {
         printf("Selection: ");
-        scanf("%d", &input);
-    } while(input < min || input > max);
+    } while (((scanf("%d%c", &input, &c) !=2 || c!='\n') && clean_stdin()) || input < min || input > max);
 
     return input;
 }
@@ -354,7 +359,7 @@ void printMenu(void) {
     printf("(8) - %s\n", menueItem8);
     printf("(9) - %s\n", menueItem9);
     printf("(0) - %s\n", menueItem0);
-    printWhitespaceOnce();
+    printLineBreakOnce();
 }
 
 /**
@@ -393,7 +398,7 @@ void printAddBillionaireMenu(BillionaireManagement *bm) {
 void handleAddBillionaire(char name[], char surname[], float net_worth, int selfmade_score, BillionaireManagement *bm) {
     createBillionaire(name, surname, net_worth, selfmade_score, bm);
 
-    printWhitespaceOnce();
+    printLineBreakOnce();
     printf("%s %s was added to the list of Billionaires!\n", name, surname);
     printf("Do you want to add another Billionaire ? y/n: ");
 
@@ -402,11 +407,11 @@ void handleAddBillionaire(char name[], char surname[], float net_worth, int self
     getchar();
 
     if(selection == 'y'|| selection == 'Y') {
-        printWhitespaceOnce();
+        printLineBreakOnce();
         printAddBillionaireMenu(bm);
     }
 
-    printWhitespaceOnce();
+    printLineBreakOnce();
 }
 
 /**
@@ -431,7 +436,7 @@ void printDeleteBillionairesMenu(BillionaireManagement *bm) {
     printf("==================================================\n");
 
     int number = printAllBillionares(true, bm);
-    printWhitespaceOnce();
+    printLineBreakOnce();
     if(number != -1) {
         int input = getInput(1, number) - 1;
         deleteBillionaireFromList(input, true, bm);
@@ -448,7 +453,7 @@ void printEditBillionairesMenu(BillionaireManagement *bm) {
     printf("==================================================\n");
 
     int number = printAllBillionares(true, bm);
-    printWhitespaceOnce();
+    printLineBreakOnce();
     if(number != -1) {
         int index = getInput(1, number) - 1;
         editBillionaireFromList(index, bm);
@@ -469,7 +474,7 @@ void printSortBillionairesMenu(BillionaireManagement *bm) {
     printf("(3) Net-Worth\n");
     printf("(4) Selfmade-Score\n");
 
-    printWhitespaceOnce();
+    printLineBreakOnce();
     int input = getInput(1, 4);
 
     sortBillionairesByCategory(input, bm);
@@ -489,14 +494,14 @@ void printSearchForBillionairesMenu(BillionaireManagement *bm) {
     printf("(3) Net-Worth\n");
     printf("(4) Selfmade-Score\n");
 
-    printWhitespaceOnce();
+    printLineBreakOnce();
     int input = getInput(1, 4);
 
     char searchString[128+1];
     printf("Search For: ");
     scanf("%s", searchString);
 
-    printWhitespace(2);
+    printLineBreak(2);
 
     bool printedOnce = false;
 
@@ -527,7 +532,7 @@ void printSaveInFileMenu(BillionaireManagement *bm) {
     scanf("%s", file_name);
     sprintf(file_name, "%s.csv", file_name);
     handleSaveBillionairesToFile(file_name, bm);
-    printWhitespace(3);
+    printLineBreak(3);
 }
 
 /**
@@ -557,7 +562,7 @@ void handleSaveBillionairesToFile(char file_name[], BillionaireManagement *bm) {
     }
 
     fclose(fileToSaveTo);
-    printWhitespaceOnce();
+    printLineBreakOnce();
     printf("Successfully saved to file: %s\n", file_name);
 }
 
@@ -604,11 +609,11 @@ void printLoadFromFileMenu(BillionaireManagement *bm) {
     char file_name[128+1];
     scanf("%s", file_name);
     sprintf(file_name, "%s.csv", file_name);
-    printWhitespaceOnce();
+    printLineBreakOnce();
 
     loadBillionairesFromFile(file_name, bm);
     printf("Successfully loaded from file: %s\n", file_name);
-    printWhitespace(3);
+    printLineBreak(3);
 }
 
 /**
@@ -832,13 +837,19 @@ void swapBillionaireWithNextBillionaire(int index, BillionaireManagement *bm) {
     // If there is no element after the one we want to swap, we do nothing.
 }
 
+/**
+ * Brints all Billionaires to the console.
+ * @param shortened Should the ouput the shortened
+ * @param bm BillionaireManagement Pointer
+ * @return
+ */
 int printAllBillionares(bool shortened, BillionaireManagement *bm) {
     struct billionaire_t* current = bm->head;
-    printWhitespace(2);
+    printLineBreak(2);
 
     if(current == NULL) {
         printf("There are no Billionaires in your list!\n");
-        printWhitespace(2);
+        printLineBreak(2);
         return -1;
     } else {
         int number = 1;
@@ -848,11 +859,17 @@ int printAllBillionares(bool shortened, BillionaireManagement *bm) {
             current = current->next;
             printBillionareProperties(current, number, shortened);
         }
-        printWhitespaceOnce();
+        printLineBreakOnce();
         return number;
     }
 }
 
+/**
+ * Prints the properties of one Billionaire
+ * @param billionaire Billionaire to print properties from
+ * @param number Number of the Billionaire in the list
+ * @param shortened Should the ouput be shortened
+ */
 void printBillionareProperties(struct billionaire_t* billionaire, int number, bool shortened) {
     if(shortened) {
         printf("Billionaire (%d): %s %s\n", number, billionaire->name, billionaire->surname);
@@ -862,15 +879,22 @@ void printBillionareProperties(struct billionaire_t* billionaire, int number, bo
         printf("Last Name: %s\n", billionaire->surname);
         printf("Net-Worth: $%0.2f Billion Dollars.\n", billionaire->net_worth);
         printf("Selfmade-Score: %d\n", billionaire->selfmade_score);
-        printWhitespaceOnce();
+        printLineBreakOnce();
     }
 }
 
-void printWhitespaceOnce(void) {
+/**
+ * Prints linebreak once
+ */
+void printLineBreakOnce(void) {
     printf("\n");
 }
 
-void printWhitespace(int times) {
+/**
+ * Prints linebreak multiple times
+ * @param times How often should a linebreak be printed
+ */
+void printLineBreak(int times) {
     for (int i = 0; i < times; ++i) {
         printf("\n");
     }
