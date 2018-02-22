@@ -5,7 +5,7 @@
 
 typedef enum { false, true } bool;
 
-typedef struct billionaire_t {
+struct billionaire_t {
     // Contained Data
     char name[128+1];
     char surname[128+1];
@@ -15,7 +15,7 @@ typedef struct billionaire_t {
     // Pointers to next and previous list entry
     struct billionaire_t* next;
     struct billionaire_t* prev;
-} Billionaire;
+};
 
 typedef struct billionaire_management {
     struct billionaire_t* head;
@@ -79,6 +79,9 @@ void insertSampleData(void) {
 
 int main(void) {
     printGreeting();
+    BillionaireManagement bm;
+    bm.head = NULL;
+    bm.tail = NULL;
 
     while(true) {
         printMenu();
