@@ -11,7 +11,7 @@
 #define menueItem3 "Delete Billionaire"     // Y
 #define menueItem4 "Sort Billionaires"      // Y
 #define menueItem5 "Save in file"           // Y
-#define menueItem6 "Load from file"
+#define menueItem6 "Load from file"         // Y
 #define menueItem7 "Search for ..."         // Y
 #define menueItem8 "Calculate memory"       // Y
 #define menueItem9 "Edit Billionaire"       // Y

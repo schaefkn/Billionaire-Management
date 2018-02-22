@@ -29,6 +29,7 @@ struct billionaire_t* getBillionaireByIndex(int index);
 void addBillionaireToLinkedList(struct billionaire_t *billionaire);
 void createBillionaire(char name[], char surname[], float net_worth, int selfmade_score);
 void deleteBillionaireFromList(int index);
+void deleteAllBillionairesFromLinkedList(void);
 void editBillionaireFromList(int index);
 void swapBillionaireWithNextBillionaire(int index);
 void sortBillionairesByCategory(int category);
@@ -65,6 +66,9 @@ struct billionaire_t *tail;
 struct billionaire_t *current;
 
 
+const char* getfield(char* line, int num);
+
+
 void insertSampleData(void) {
     createBillionaire("Bill", "Gates", 91.7, 8);
     createBillionaire("Jeff", "Bezos", 120.8, 8);
@@ -75,7 +79,6 @@ void insertSampleData(void) {
 
 int main(void) {
     printGreeting();
-    insertSampleData();
 
     while(true) {
         printMenu();
@@ -405,7 +408,13 @@ void printSaveInFileMenu(void) {
 
     for(int i = 0; i < getLengthOfLinkedList(); i++) {
         current = getBillionaireByIndex(i);
-        fprintf(fileToSaveTo, "%s %s %f %d\n", current->name, current->surname, current->net_worth, current->selfmade_score);
+        char net_worth[64];
+        sprintf(net_worth, "%f", current->net_worth);
+
+        char selfmade_score[8];
+        sprintf(selfmade_score, "%d", current->selfmade_score);
+
+        fprintf(fileToSaveTo, "%s;%s;%s;%s\n", current->name, current->surname, net_worth, selfmade_score);
     }
 
     fclose(fileToSaveTo);
@@ -414,13 +423,69 @@ void printSaveInFileMenu(void) {
     printWhitespace(3);
 }
 
+
+const char* getfield(char* line, int num)
+{
+    const char* tok;
+    for (tok = strtok(line, ";");
+         tok && *tok;
+         tok = strtok(NULL, ";\n"))
+    {
+        if (!--num)
+            return tok;
+    }
+    return NULL;
+}
+
+void deleteAllBillionairesFromLinkedList(void) {
+    for (int i = getLengthOfLinkedList(); i > 0; i--) {
+        deleteBillionaireFromList(i);
+    }
+}
+
 void printLoadFromFileMenu(void) {
     printf("==================================================\n");
     printf("                LOAD BILLIONAIRES                 \n");
     printf("==================================================\n");
-    printf("From which file do you want to load: \n");
+    printf("From which file do you want to load: ");
 
+    char file_name[128+1];
+    scanf("%s", file_name);
+    sprintf(file_name, "%s.csv", file_name);
+
+    printWhitespaceOnce();
+
+    FILE *fileToOpen = fopen(file_name, "r");
+    if(fileToOpen == NULL) {
+        printf("There is no file with name: %s\n", file_name);
+        return;
+    }
+
+    deleteAllBillionairesFromLinkedList();
+
+    char line[1024];
+    while(fgets(line, 1024, fileToOpen)) {
+        char* tmp = strdup(line);
+        char name[128+1];
+        char surname[128+1];
+        float net_worth;
+        int selfmade_score;
+
+        strcpy(name, getfield(tmp, 1));
+        tmp = strdup(line);
+        strcpy(surname, getfield(tmp, 2));
+        tmp = strdup(line);
+        net_worth = atof(getfield(tmp, 3));
+        tmp = strdup(line);
+        selfmade_score = atoi(getfield(tmp, 4));
+
+        createBillionaire(name, surname, net_worth, selfmade_score);
+
+        free(tmp);
+    }
 }
+
+
 
 bool searchForProperty(int property, struct billionaire_t* current, char searchFor[]) {
 
