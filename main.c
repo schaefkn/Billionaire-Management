@@ -794,6 +794,21 @@ void swapBillionaireWithNextBillionaire(int index, BillionaireManagement *bm) {
     // If there is no element after the one to be swapped. The element can't be swapped.
     // So we need to check if there is an element, after the eleent to be swapped.
     if(billionaireAfter) {
+
+        // [1] <-- [billionaireToSwap] <-- [billionaireAfter] <-- [4]
+        // [1] --> [billionaireToSwap] --> [billionaireAfter] --> [4]
+
+        // First: Only swap billionaireAfter and billionareToSwap
+        //                                 [billionaireAfter] <-- [4]
+        // [1] <-- [billionaireAfter] <-- [billionaireToSwap]     [4]
+        // [1]     [billionaireAfter] --> [billionaireToSwap] --> [4]
+        // [1] --> [billionaireToSwap]
+
+        // Second: If they are elements after toswap and before after (they are not null), then update their new prev and next respectively.
+        // [1] <-- [billionaireAfter] <-- [billionaireToSwap] <-- [4]
+        // [1] --> [billionaireAfter] --> [billionaireToSwap] --> [4]
+
+
         // Before [billionaireToSwap] <--> [billionaireAfter]
         // First switch the the elements themselves.
         billionaireToSwap->next = billionaireAfter->next;
@@ -811,7 +826,7 @@ void swapBillionaireWithNextBillionaire(int index, BillionaireManagement *bm) {
         if(billionaireAfter->prev) billionaireAfter->prev->next = billionaireAfter;
         // If the old after element was the tail element, now after the swap the new tail must be toswap.
         if(billionaireAfter == bm->tail) bm->tail = billionaireToSwap;
-        // The the old swap element was the head element, now aftehr the swap the new head must be after.
+        // The the old swap element was the head element, now after the swap the new head must be after.
         if(billionaireToSwap == bm->head) bm->head = billionaireAfter;
     }
     // If there is no element after the one we want to swap, we do nothing.
