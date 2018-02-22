@@ -77,7 +77,6 @@ int main(void) {
     BillionaireManagement bm;
     bm.head = NULL;
     bm.tail = NULL;
-    insertSampleData(&bm);
 
     while(true) {
         printMenu();
