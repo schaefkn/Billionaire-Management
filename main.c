@@ -214,6 +214,9 @@ void handleArguments(int argc, const char* argv[], LinkedListManagement* llm) {
         char file_name[128+1];
         strcpy(file_name, argv[1]);
         loadBillionairesFromFile(file_name, llm);
+    } else if(argc > 2) {
+        fprintf(stderr, "Usage: %s <file name> (optional)\n", argv[0]);
+        exit(1);
     }
 }
 
