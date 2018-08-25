@@ -66,6 +66,7 @@ void handleAddBillionaire(char name[], char surname[], float net_worth, int self
 void handleSaveBillionairesToFile(char file_name[], LinkedListManagement* llm);
 void handleExit(LinkedListManagement *llm);
 void handleSecretEasterEgg(void);
+void handleArguments(int argc, const char* argv[]);
 
 const char* getfield(char* line, int num);
 int getInput(int min, int max);
@@ -91,12 +92,7 @@ void insertSampleData(LinkedListManagement *llm) {
 int main(int argc, const char* argv[]) {
     LinkedListManagement* llm = createLinkedListManagement();
 
-    if(argc == 2) {
-        char file_name[128+1];
-        strcpy(file_name, argv[1]);
-        loadBillionairesFromFile(file_name, llm);
-    }
-
+    handleArguments(argc, argv);
     printGreeting();
     while(true) {
         printMenu();
@@ -274,6 +270,17 @@ void handleInput(LinkedListManagement* llm) {
             handleSecretEasterEgg();
         default:
             break;
+    }
+}
+
+/**
+ * Handler for arguments at the start of the program.
+ */
+void handleArguments(int argc, const char* argv[]) {
+    if(argc == 2) {
+        char file_name[128+1];
+        strcpy(file_name, argv[1]);
+        loadBillionairesFromFile(file_name, llm);
     }
 }
 
